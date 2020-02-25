@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 import base64
 import requests
@@ -66,8 +66,8 @@ class Client:
                 return
             time.sleep(0.5)
 
-    def recognizeAsGenerator(self, files):
-        payload = { 'files': [] }
+    def recognizeAsGenerator(self, files, words=False):
+        payload = { 'files': [], 'makeSentences': not words } # make love not bombs
         for f in files:
             if f.endswith('.pdf'):
                 mimeType = 'application/pdf'
@@ -111,11 +111,11 @@ class Client:
             'RecognizedText': json['RecognizedText'],
         }]
 
-    def recognize(self, files):
+    def recognize(self, files, words=False):
         if type(files) is not list:
             msg = 'You must pass in a list of files, not a {}'.format(type(files))
             raise TypeError(msg)
         pages = list()
-        for ps in self.recognizeAsGenerator(files):
+        for ps in self.recognizeAsGenerator(files, words=words):
             pages.extend(ps)
         return pages

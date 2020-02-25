@@ -88,6 +88,12 @@ class Client:
         return pages
 ```
 
+## Word-Level Bounding Boxes
+
+`client.recognize(files, words=False)` has a parameter, `words`, which defaults to `False`, but if it's set to `True` then word-level bounding boxes are returned instead of sentence-level bounding boxes.
+
+## Official API Documentation
+
 Here is the [official documentation for the Sight API](https://siftrics.com/docs/sight.html).
 
 # Apache V2 License
