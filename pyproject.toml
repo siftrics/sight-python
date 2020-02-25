@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sight-api"
-version = "1.0.0"
+version = "1.0.1"
 description = "Official client for Siftrics' Sight API, which is a text recognition service"
 license = "Apache Version 2.0"
 authors = ["Siftrics Founder <siftrics@siftrics.com>"]
