@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "sight-api"
+version = "1.0.0"
+description = "Official client for Siftrics' Sight API, which is a text recognition service"
+license = "Apache Version 2.0"
+authors = ["Siftrics Founder <siftrics@siftrics.com>"]
+readme = 'README.md'  # Markdown files are supported
+repository = "https://github.com/siftrics/sight-python"
+homepage = "https://siftrics.com/"
+keywords = ['sight', 'api', 'text', 'recognition', 'ocr', 'computer', 'vision', 'siftrics']
+
+[tool.poetry.dependencies]
+python = "=2.7.* || >=3.5"  # Compatible python versions must be declared here
+requests = "^2.23.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
