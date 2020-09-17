@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 import base64
 import requests
@@ -66,20 +66,26 @@ class Client:
                 return
             time.sleep(0.5)
 
-    def recognizeAsGenerator(self, files, words=False):
-        payload = { 'files': [], 'makeSentences': not words } # make love not bombs
+    def recognizeAsGenerator(self, files, words=False, autoRotate=False, exifRotate=False):
+        payload = {
+            'files': [],
+            'makeSentences': not words, # make love not bombs
+            'doAutoRotate': autoRotate,
+            'doExifRotate': exifRotate
+        }
         for f in files:
-            if f.endswith('.pdf'):
+            fn = f.lower()
+            if fn.endswith('.pdf'):
                 mimeType = 'application/pdf'
-            elif f.endswith('.bmp'):
+            elif fn.endswith('.bmp'):
                 mimeType = 'image/bmp'
-            elif f.endswith('.gif'):
+            elif fn.endswith('.gif'):
                 mimeType = 'image/gif'
-            elif f.endswith('.jpeg'):
+            elif fn.endswith('.jpeg'):
                 mimeType = 'image/jpeg'
-            elif f.endswith('.jpg'):
+            elif fn.endswith('.jpg'):
                 mimeType = 'image/jpg'
-            elif f.endswith('.png'):
+            elif fn.endswith('.png'):
                 mimeType = 'image/png'
             else:
                 msg = '{} does not have a valid extension; it must be one of ".pdf", ".bmp", ".gif", ".jpeg", ".jpg", or ".png".'.format(f)
@@ -103,19 +109,22 @@ class Client:
             return
         if 'RecognizedText' not in json:
             raise Exception('This should never happen. Got successful HTTP status code (200) but the body was not the JSON we were expecting.')
-        yield [{
+        page = {
             'Error': '',
             'FileIndex': 0,
             'PageNumber': 1,
-            'NumberOfPagesInFile': 1,
-            'RecognizedText': json['RecognizedText'],
-        }]
+            'NumberOfPagesInFile': 1
+        }
+        page.update(json)
+        yield [page]
+        return
 
-    def recognize(self, files, words=False):
+    def recognize(self, files, words=False, autoRotate=False, exifRotate=False):
         if type(files) is not list:
             msg = 'You must pass in a list of files, not a {}'.format(type(files))
             raise TypeError(msg)
         pages = list()
-        for ps in self.recognizeAsGenerator(files, words=words):
+        for ps in self.recognizeAsGenerator(
+                files, words=words, autoRotate=autoRotate, exifRotate=exifRotate):
             pages.extend(ps)
         return pages
